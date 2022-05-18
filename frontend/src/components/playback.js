@@ -14,6 +14,8 @@ export const Playback = ({url, filename}) => {
   const [playing, setPlaying] = useState(false);
   const toggle = () => setPlaying(!playing);
   const splicedFileName = filename.substr(37);
+  const downloadRef = useRef();
+
   useEffect(() => {
     audio.addEventListener('ended', () => setPlaying(false));
     return () => {
@@ -22,6 +24,11 @@ export const Playback = ({url, filename}) => {
   }, []);
 
   useEffect(() => {
+    fetch(url).then(res => res.blob()).then(blob => {
+      const localURL = window.URL.createObjectURL(blob);
+      const a = downloadRef.current;
+      a.href = localURL;
+    })
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current,
       preload: true,
@@ -44,7 +51,7 @@ export const Playback = ({url, filename}) => {
           {splicedFileName}
         </div>
         <div className="border-l-2 border-black hover:text-gray-400 underline-offset-auto">
-          <a href={url} download={url}><DownloadIcon /></a>
+          <a ref={downloadRef} download={splicedFileName}><DownloadIcon /></a>
         </div>
       </div>
     </>
