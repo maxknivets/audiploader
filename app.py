@@ -39,7 +39,7 @@ setup_jinja2_ext(app)
 @app.cli.command("webpack_init")
 def webpack_init():
     pkg_path = os.path.dirname(webpack_boilerplate.__file__)
-    cookiecutter(pkg_path, directory="templates")
+    cookiecutter(pkg_path, directory="frontend_template")
 
 
 ## ROUTES ##
